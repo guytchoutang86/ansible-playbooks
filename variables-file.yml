@@ -1,0 +1,7 @@
+msge_1: Update all packages for server
+msge_2: Install latest version of Apache
+msge_3: Restart Apache
+status: started
+msge_4: Enable Apache for all servers
+yes_no: no
+msge_5: Restarting Apache

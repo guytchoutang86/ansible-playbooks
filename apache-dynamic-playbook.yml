@@ -1,0 +1,46 @@
+# this is a playbook to install apache
+- name: intalling apache on linux hosts
+  hosts: linux
+  vars_files:
+    - variables.yml
+  become: yes # allow to run the playbook as a root
+  
+  tasks:
+    - name: "{{msge_1}}" # equivalent of sudo yum update -y
+      yum:
+        name: '*'
+        state: latest 
+    - name: "{{msge_2}}" # equivalent of sudo yum install http -y
+      yum:
+        name: httpd
+        state: latest
+    - name: "{{msge_3}}" # equivalent of sudo systemctl start httpd 
+      ansible.builtin.service:
+        name: httpd
+        state: "{{status}}"
+    - name: " {{msge_4}} " # equivalent of systemctl enable httpd
+      ansible.builtin.service:
+        name: httpd
+        enabled: "{{yes_no}}"
+    - name: copy index-ansible.html from controller to hosts # equivalent of echo
+      ansible.builtin.copy:
+        src: index-ansible.html
+        dest: /var/www/html/
+      notify:
+        - restart apache
+      
+  handlers:
+    - name: restart apache #this is the handler name to be recall
+      ansible.builtin.service:
+        name: '{{msge_6}}'
+        state: restarted
+
+- name:  display a meesage on all ubuntu hosts
+  hosts: ubuntu
+
+  tasks:
+    - name: Displaying a message
+      ansible.builtin.debug:
+        msg: "{{msge_5}}"
+    - name: Pinging all Ubuntu hosts
+      ansible.builtin.ping:

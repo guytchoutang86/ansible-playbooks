@@ -1,0 +1,26 @@
+# this is a playbook to install apache
+- name: intalling apache on linux hosts
+  hosts: linux
+  
+  tasks:
+    - name: update all packages # equivalent of sudo yum update -y
+      yum:
+        name: '*'
+        state: latest 
+    - name: install latest version of apache # equivalent of sudo yum install http -y
+      yum:
+        name: httpd
+        state: latest
+    - name: start apache # equivalent of sudo systemctl start httpd 
+      ansible.builtin.service:
+        name: httpd
+        state: started
+    - name: enable service httpd # equivalent of systemctl enable httpd
+      ansible.builtin.service:
+        name: httpd
+        enabled: yes
+    - name: copy index-apache.html from controler to clients # equivalent of echo
+      ansible.builtin.copy:
+        src: index-apache.html
+        dest: /var/www/html/
+ 
